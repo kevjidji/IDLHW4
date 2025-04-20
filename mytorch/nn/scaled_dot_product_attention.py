@@ -1,5 +1,5 @@
 import numpy as np
-from .activation import Softmax
+from activation import Softmax
 
 class ScaledDotProductAttention:
     """
