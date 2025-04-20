@@ -174,8 +174,8 @@ class LMDataset(Dataset):
         lengths = torch.tensor([sublist.shape[0] for sublist in shifted_transcripts]).to(torch.long)
 
         # TODO: Pad sequences (use torch.nn.utils.rnn.pad_sequence and pad with pad_token)
-        padded_shifted = torch.nn.utils.rnn.pad_sequence(shifted_transcripts, padding_value=self.pad_token)
-        padded_golden  = torch.nn.utils.rnn.pad_sequence(golden_transcripts, padding_value=self.pad_token)
+        padded_shifted = torch.nn.utils.rnn.pad_sequence(shifted_transcripts, padding_value=self.pad_token, batch_first=True)
+        padded_golden  = torch.nn.utils.rnn.pad_sequence(golden_transcripts, padding_value=self.pad_token, batch_first=True)
 
         # TODO: Return the padded shifted, padded golden, and lengths
         return padded_shifted, padded_golden, lengths
