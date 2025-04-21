@@ -33,8 +33,7 @@ def PadMask(padded_input, input_lengths):
             if j < input_lengths[i]:
                 pad_mask[i][j] = 0
 
-    print(input_lengths)
-    print(pad_mask)
+
     return pad_mask
 ''' 
 TODO: Implement this function.
