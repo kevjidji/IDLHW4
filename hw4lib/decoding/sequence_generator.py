@@ -180,6 +180,7 @@ class SequenceGenerator:
      
           token_scores = log_probs[:,next_tokens]
           token_scores[finished==True] = 1
+          print("TOKEN SCORES SHAPE",token_scores.shape)
           scores = scores * token_scores
         
           x = torch.cat([x,next_tokens.unsqueeze(dim=1)],1)
