@@ -177,7 +177,7 @@ class SequenceGenerator:
           logits = logits / temperature
           log_probs = nn.functional.log_softmax(logits)
           next_tokens = torch.argmax(log_probs,dim=1)
-     
+          print("LOG PROBS SHAPE",log_probs.shape)
           token_scores = log_probs[:,next_tokens]
           token_scores[finished==True] = 1
           print("TOKEN SCORES SHAPE",token_scores.shape)
