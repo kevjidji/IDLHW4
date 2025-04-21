@@ -244,7 +244,7 @@ class LMTrainer(BaseTrainer):
             raise ValueError("Optimizer is not initialized, initialize it first!")
         
         # TODO: In-fill the train method
-        
+
 
         # Training loop
         best_val_loss = float('inf')
@@ -252,10 +252,10 @@ class LMTrainer(BaseTrainer):
         for epoch in range(self.current_epoch, self.current_epoch + epochs):
             
             # TODO: Train for one epoch
-            train_metrics, train_attn = _train_epoch(train_dataloader)
+            train_metrics, train_attn = self._train_epoch(train_dataloader)
             
             # TODO: Validate
-            val_metrics, val_attn = _validate_epoch(val_dataloader)
+            val_metrics, val_attn = self._validate_epoch(val_dataloader)
 
             # TODO: Generate with the validation set
             gen_results = self.generate(val_dataloader, generation_config=self._get_evaluation_generation_configs()['greedy'])
