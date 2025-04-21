@@ -244,7 +244,7 @@ class LMTrainer(BaseTrainer):
             raise ValueError("Optimizer is not initialized, initialize it first!")
         
         # TODO: In-fill the train method
-        raise NotImplementedError # Remove once implemented
+        
 
         # Training loop
         best_val_loss = float('inf')
