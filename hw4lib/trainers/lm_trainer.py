@@ -85,7 +85,7 @@ class LMTrainer(BaseTrainer):
             # TODO: Unpack batch from the dataloader
             # TODO: Move the batch elements to self.device
             targets_shifted, targets_golden, lengths = batch
-            device=  self.model.device
+            device=  self.device
             targets_shifted, targets_golden, lengths = targets_shifted.to(device), targets_golden.to(device), lengths.to(device) 
         
 
@@ -181,7 +181,7 @@ class LMTrainer(BaseTrainer):
             # TODO: Unpack batch
             # TODO: Move the batch elements to self.device
             targets_shifted, targets_golden, lengths = batch
-            device=  self.model.device
+            device=  self.device
             targets_shifted, targets_golden, lengths = targets_shifted.to(device), targets_golden.to(device), lengths.to(device)
 
             # Forward pass
