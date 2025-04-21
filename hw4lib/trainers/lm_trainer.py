@@ -390,7 +390,7 @@ class LMTrainer(BaseTrainer):
                 raise NotImplementedError # Remove if you implemented the sampling method
             elif generation_config.get('beam_width', 1) > 1:
                 print("Generating with beam search...")
-                seqs, scores = 
+                seqs, scores = None, None 
                 raise NotImplementedError # Remove if you implemented the beam search method
                 # Take best beam and score
                 seqs = seqs[:, 0]
