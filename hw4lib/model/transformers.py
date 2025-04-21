@@ -156,7 +156,7 @@ class DecoderOnlyTransformer(nn.Module):
             pad_mask_dec = PadMask(padded_targets, target_lengths).to(padded_targets.device)
         
         # TODO: Create causal mask to prevent attending to future tokens on the same device as the input (use CausalMask)
-        causal_mask = CausalMask(padded_targets)
+        causal_mask = CausalMask(padded_targets).to(padded_targets.device)
 
         # TODO: Apply the embedding
         x = self.target_embedding(padded_targets)
