@@ -72,6 +72,5 @@ class PositionalEncoding(nn.Module):
             raise ValueError(f"Sequence length {seq_len} exceeds the maximum length {self.pe.size(1)}")
         # Step 3: Add positional encodings to input
 
-        print(x.shape)
-        print(self.pe.shape)
+       
         return(x+self.pe[:,:seq_len,:])
