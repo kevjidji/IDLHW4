@@ -54,6 +54,7 @@ class LMTrainer(BaseTrainer):
         # How would you set the ignore_index? 
         # Use value in config to set the label_smoothing argument
         print(config["loss"])
+        print("BRO DO SOMETHING")
         self.criterion = nn.CrossEntropyLoss(label_smoothing=config["loss"]["label_smoothing"],ignore_index=tokenizer.pad_id)
 
         
