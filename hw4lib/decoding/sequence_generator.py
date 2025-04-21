@@ -166,7 +166,7 @@ class SequenceGenerator:
         
         # TODO: Implement greedy search
 
-        scores = torch.ones(x.shape[0])
+        scores = torch.ones(x.shape[0]).to(self.device)
         finished = torch.zeros(x.shape[0],dtype=torch.bool)
         for t in range(self.max_length- x.shape[1]):
           if not (finished==False).any():
