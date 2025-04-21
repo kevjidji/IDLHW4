@@ -184,7 +184,7 @@ class SequenceGenerator:
         
           x = torch.cat([x,next_tokens.unsqueeze(dim=1)],1)
           finished = torch.logical_or(finished, (next_tokens==self.tokenizer.eos_id))
-        print("SCORES SHAPE",scores.shape())
+        print("SCORES SHAPE",scores.shape)
         return x, scores
  
 
