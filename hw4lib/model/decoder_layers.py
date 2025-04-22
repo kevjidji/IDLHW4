@@ -98,10 +98,12 @@ class CrossAttentionDecoderLayer(nn.Module):
         self.self_attn  = SelfAttentionLayer(d_model, num_heads, dropout)
         self.cross_attn = CrossAttentionLayer(d_model, num_heads,dropout)
         self.ffn =FeedForwardLayer(d_model, d_ff, dropout)
+
         
 
     def forward(self, x: torch.Tensor, enc_output: torch.Tensor, dec_key_padding_mask: Optional[torch.Tensor] = None, enc_key_padding_mask: Optional[torch.Tensor] = None, attn_mask: Optional[torch.Tensor] = None) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         '''
+      
         Forward pass for the CrossAttentionDecoderLayer.
         Args:
             x (torch.Tensor): The input tensor. shape: (batch_size, seq_len, d_model)   
@@ -114,11 +116,15 @@ class CrossAttentionDecoderLayer(nn.Module):
             self_attn_weights (torch.Tensor): The attention weights. shape: (batch_size, seq_len, seq_len)   
             cross_attn_weights (torch.Tensor): The attention weights. shape: (batch_size, seq_len, seq_len)    
         '''
+        
         # TODO: Implement forward: Follow the figure in the writeup
-
-        x, self_attn_weights  = self.self_attn(x,enc_key_padding_mask, attn_mask)
-        x, cross_attn_weights = self.cross_attn(x,enc_output, dec_key_padding_mask, attn_mask)
-
+      
+        x, self_attn_weights  = self.self_attn(x,key_padding_mask=dec_key_padding_mask, attn_mask=attn_mask)
+        
+     
+        x, cross_attn_weights = self.cross_attn(x,enc_output, key_padding_mask= enc_key_padding_mask)
+        x=self.ffn(x)
         # TODO: Return the output tensor and attention weights    
+        
         return x, self_attn_weights, cross_attn_weights
 ## -------------------------------------------------------------------------------------------------    

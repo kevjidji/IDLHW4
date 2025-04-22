@@ -73,6 +73,8 @@ class SelfAttentionLayer(nn.Module):
        
         pre_x = x
         x= self.norm(x)
+        
+        
         x, mha_attn_weights = self.mha(x,x,x,  need_weights=True, average_attn_weights=True, key_padding_mask=key_padding_mask, attn_mask=attn_mask)
         
         # NOTE: For some regularization you can apply dropout and then add residual connection
