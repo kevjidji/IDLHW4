@@ -132,6 +132,7 @@ class LMDataset(Dataset):
     def __len__(self) -> int:
         """Returns the number of samples in the dataset."""
         # TODO: Implement __len__
+        
         return self.length
 
     def __getitem__(self, idx: int) -> Tuple[torch.LongTensor, torch.LongTensor]:

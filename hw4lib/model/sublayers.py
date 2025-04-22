@@ -110,7 +110,7 @@ class CrossAttentionLayer(nn.Module):
         # TODO: Implement __init__
         
         # TODO: Initialize the multi-head attention mechanism (use nn.MultiheadAttention)
-        self.mha = nn.MultiheadAttention(d_model, num_heads)
+        self.mha = nn.MultiheadAttention(d_model, num_heads, batch_first=True)
         
         # TODO: Initialize the normalization layer (use nn.LayerNorm)
         self.norm =nn.LayerNorm(d_model)
