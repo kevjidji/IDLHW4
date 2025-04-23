@@ -207,8 +207,8 @@ class ASRTrainer(BaseTrainer):
         results = recognize(dataloader, recognition_config =None, config_name= None, max_length: Optional[int] = None) -> List[Dict[str, Any]]:
         
         # TODO: Extract references and hypotheses from results
-        references = NotImplementedError
-        hypotheses = NotImplementedError
+        references = [result["target"] for result in results]
+        hypotheses = [result["generated"] for result in results]
         
         # Calculate metrics on full batch
         metrics = self._calculate_asr_metrics(references, hypotheses)
