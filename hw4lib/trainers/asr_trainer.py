@@ -62,11 +62,11 @@ class ASRTrainer(BaseTrainer):
         # TODO: Initialize CE loss
         # How would you set the ignore_index? 
         # Use value in config to set the label_smoothing argument
-        self.ce_criterion = NotImplementedError
+        self.ce_criterion = nn.CrossEntropyLoss(ignore_index=tokenizer.pad_id, label_smoothing=config["loss"]["label_smoothing"])
         
         # TODO: Initialize CTC loss if needed
         # You can use the pad token id as the blank index
-        self.ctc_criterion = None
+        self.ctc_criterion = nn.CTCLoss(blank=tokenizer.pad_id)
         self.ctc_weight = self.config['loss'].get('ctc_weight', 0.0)
         if self.ctc_weight > 0:
             self.ctc_criterion = nn.CTCLoss(
@@ -74,7 +74,7 @@ class ASRTrainer(BaseTrainer):
                 zero_infinity=True
             )
         
-        raise NotImplementedError # Remove once implemented
+        
 
 
     def _train_epoch(self, dataloader):
@@ -87,7 +87,7 @@ class ASRTrainer(BaseTrainer):
             Tuple[Dict[str, float], Dict[str, torch.Tensor]]: Training metrics and attention weights
         """
         # TODO: In-fill the _train_epoch method
-        raise NotImplementedError # Remove once implemented
+        
     
         # Initialize training variables
         self.model.train()
@@ -104,21 +104,22 @@ class ASRTrainer(BaseTrainer):
         for i, batch in enumerate(dataloader):
             # TODO: Unpack batch and move to device
             feats, targets_shifted, targets_golden, feat_lengths, transcript_lengths = batch
+            feats, targets_shifted, targets_golden, feat_lengths, transcript_lengths = feats.to(self.device), targets_shifted.to(self.device), targets_golden.to(self.device), feat_lengths.to(self.device), transcript_lengths.to(self.device)
 
             with torch.autocast(device_type=self.device, dtype=torch.float16):
                 # TODO: get raw predictions and attention weights and ctc inputs from model
-                seq_out, curr_att, ctc_inputs = NotImplementedError
+                seq_out, curr_att, ctc_inputs = model(feats, targets_shifted, feat_lengths, transcript_lengths)
                 
                 # Update running_att with the latest attention weights
                 running_att = curr_att
                 
                 # TODO: Calculate CE loss
-                ce_loss = NotImplementedError
+                ce_loss = self.ce_criterion(seq_out.view(-1,self.tokenizer.vocab_size), targets_golden.view(-1))
                 
                 
                 # TODO: Calculate CTC loss if needed
                 if self.ctc_weight > 0:
-                    ctc_loss = NotImplementedError
+                    ctc_loss = self.ctc_criterion(ctc_inputs, targets_golden, feat_lengths, transcript_lengths)
                     loss = ce_loss + self.ctc_weight * ctc_loss
                 else:
                     ctc_loss = torch.tensor(0.0)
@@ -136,7 +137,7 @@ class ASRTrainer(BaseTrainer):
             loss = loss / self.config['training']['gradient_accumulation_steps']
 
             # TODO: Backpropagate the loss
-            self.scaler = NotImplementedError
+            self.scaler.scale(loss).backward()
 
             # Only update weights after accumulating enough gradients
             if (i + 1) % self.config['training']['gradient_accumulation_steps'] == 0:
@@ -203,7 +204,7 @@ class ASRTrainer(BaseTrainer):
         raise NotImplementedError # Remove once implemented
 
         # TODO: Call recognize
-        results = NotImplementedError
+        results = recognize(dataloader, recognition_config =None, config_name= None, max_length: Optional[int] = None) -> List[Dict[str, Any]]:
         
         # TODO: Extract references and hypotheses from results
         references = NotImplementedError
