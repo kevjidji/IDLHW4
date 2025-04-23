@@ -10,7 +10,7 @@ from ..model import DecoderOnlyTransformer
 import torchaudio.functional as aF
 import json
 import torchmetrics.text as tmt
-from torch.utils.data import Subset
+from torch.utils.data import Subset, dataloader
 import pandas as pd
 
 
@@ -201,10 +201,10 @@ class ASRTrainer(BaseTrainer):
             Tuple[Dict[str, float], List[Dict[str, Any]]]: Validation metrics and recognition results
         """
         # TODO: In-fill the _validate_epoch method
-        raise NotImplementedError # Remove once implemented
+        
 
         # TODO: Call recognize
-        results = recognize(dataloader, recognition_config =None, config_name= None, max_length: Optional[int] = None) -> List[Dict[str, Any]]:
+        results = self.recognize(dataloader, recognition_config =None, config_name= None, max_length= None)
         
         # TODO: Extract references and hypotheses from results
         references = [result["target"] for result in results]
@@ -231,7 +231,7 @@ class ASRTrainer(BaseTrainer):
             raise ValueError("Optimizer is not initialized, initialize it first!")
         
         # TODO: In-fill the train method
-        raise NotImplementedError # Remove once implemented
+        
 
         # Set max transcript length
         self.text_max_len = max(val_dataloader.dataset.text_max_len, train_dataloader.dataset.text_max_len)
@@ -245,10 +245,10 @@ class ASRTrainer(BaseTrainer):
         for epoch in range(self.current_epoch, self.current_epoch + epochs):
 
             # TODO: Train for one epoch
-            train_metrics, train_attn = NotImplementedError, NotImplementedError
+            train_metrics, train_attn = self._train_epoch(dataloader=train_dataloader)
             
             # TODO: Validate
-            val_metrics, val_results = NotImplementedError, NotImplementedError
+            val_metrics, val_results = self._validate_epoch(val_dataloader)
 
             # Step ReduceLROnPlateau scheduler with validation loss
             if isinstance(self.scheduler, torch.optim.lr_scheduler.ReduceLROnPlateau):
@@ -354,7 +354,7 @@ class ASRTrainer(BaseTrainer):
             raise ValueError("text_max_len is not set. Please run training loop first or provide a max_length")
         
         # TODO: In-fill the recognize method
-        raise NotImplementedError # Remove once implemented
+       
 
         if recognition_config is None:
             # Default config (greedy search)
@@ -391,9 +391,12 @@ class ASRTrainer(BaseTrainer):
                 # TODO: Unpack batch and move to device
                 # TODO: Handle both cases where targets may or may not be None (val set v. test set) 
                 feats, _, targets_golden, feat_lengths, _ = batch
+                feats = feats.to(self.device)
+                targets_golden = targets_golden.to(self.device)
+                feat_lengths = feat_lengths.to(self.device)
                 
                 # TODO: Encode speech features to hidden states
-                encoder_output, pad_mask_src, _, _ = NotImplementedError, NotImplementedError, NotImplementedError, NotImplementedError
+                encoder_output, pad_mask_src, _, _ = self.model.encode(feats, feat_lengths)
                 
                 # Define scoring function for this batch
                 def get_score(x):
@@ -408,20 +411,21 @@ class ASRTrainer(BaseTrainer):
 
                 # TODO: Initialize prompts as a batch of SOS tokens
                 batch_size = feats.size(0)
-                prompts = NotImplementedError
+                prompts = torch.full(batch_size,self.tokenizer.sos_id)
+
 
                 # TODO: Generate sequences
                 if recognition_config['beam_width'] > 1:
                     # TODO: If you have implemented beam search, generate sequences using beam search
-                    seqs, scores = NotImplementedError, NotImplementedError
+                    seqs, scores = generator.generate_greedy()
                     raise NotImplementedError # Remove if you implemented the beam search method
                     # Pick best beam
                     seqs = seqs[:, 0, :]
                     scores = scores[:, 0]
                 else:
                     # TODO: Generate sequences using greedy search
-                    seqs, scores = NotImplementedError, NotImplementedError
-                    raise NotImplementedError # Remove if you implemented the greedy search method
+                    seqs, scores =generator.generate_greedy(prompts,recognition_config["temperature"],recognition_config["repeat_penalty"])
+                    
 
                 # Clean up
                 del feats, feat_lengths, encoder_output, pad_mask_src, prompts
