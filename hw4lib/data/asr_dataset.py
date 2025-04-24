@@ -309,6 +309,9 @@ class ASRDataset(Dataset):
 
         # TODO: Pad features to create a batch of fixed-length padded features
         # Note: Use torch.nn.utils.rnn.pad_sequence to pad the features (use pad_token as the padding value)
+
+        for feats in batch_feats:
+           print(feats.shape,"FEATS SHAPE")
         padded_feats = torch.nn.utils.rnn.pad_sequence(batch_feats, batch_first=True, padding_value=self.tokenizer.pad_id)
 
         # TODO: Handle transcripts for non-test partitions
