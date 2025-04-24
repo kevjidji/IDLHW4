@@ -121,10 +121,7 @@ class ASRTrainer(BaseTrainer):
                 
                 # TODO: Calculate CTC loss if needed
                 if self.ctc_weight > 0:
-                    print(ctc_inputs["log_probs"].shape)
-                    print(targets_golden.shape)
-                    print(ctc_inputs["lengths"])
-                    print(transcript_lengths)
+                    
                     ctc_loss = self.ctc_criterion(ctc_inputs["log_probs"], targets_golden, ctc_inputs["lengths"], transcript_lengths)
                     loss = ce_loss + self.ctc_weight * ctc_loss
                 else:
