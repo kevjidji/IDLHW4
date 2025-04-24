@@ -363,10 +363,10 @@ class EncoderDecoderTransformer(nn.Module):
         # TODO: Apply normalization
         x_enc = self.encoder_norm(x_enc)
         # TODO: Project to CTC logits
-        ctc_logits = self.ctc_head(x_enc)
-        print("X ENC SHAPE",x_enc.shape)
+        ctc_logits = torch.transpose(self.ctc_head(x_enc),0,1)
+
         # TODO: Return the encoded representation, padding mask, running attention weights, and CTC inputs (see docstring)
-        return x_enc, pad_mask_src, running_att, {"log_probs":ctc_logits, "lengths":source_lengths}
+        return x_enc, pad_mask_src, running_att, {"log_probs":ctc_logits, "lengths":x_enc_lengths}
 
     def decode(
         self, 
