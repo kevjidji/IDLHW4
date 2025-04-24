@@ -414,7 +414,7 @@ class ASRTrainer(BaseTrainer):
 
                 # TODO: Initialize prompts as a batch of SOS tokens
                 batch_size = feats.size(0)
-                prompts = torch.full([batch_size,1],self.tokenizer.sos_id)
+                prompts = torch.full([batch_size,1],self.tokenizer.sos_id).to(self.device)
 
 
                 # TODO: Generate sequences
