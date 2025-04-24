@@ -55,7 +55,7 @@ class ASRTrainer(BaseTrainer):
         - Handle both greedy and optionally beam search decoding
     """
     def __init__(self, model, tokenizer, config, run_name, config_file, device=None):
-        print("DO SOMETHING PLEASE")
+    
         super().__init__(model, tokenizer, config, run_name, config_file, device)
 
         # TODO: Implement the __init__ method
@@ -210,7 +210,7 @@ class ASRTrainer(BaseTrainer):
         
 
         # TODO: Call recognize
-        results = self.recognize(dataloader, recognition_config =None, config_name= None, max_length=self.config["model"]["max_len"])
+        results = self.recognize(dataloader, recognition_config =None, config_name= None, max_length=self.model.max_len)
         
         # TODO: Extract references and hypotheses from results
         references = [result["target"] for result in results]
