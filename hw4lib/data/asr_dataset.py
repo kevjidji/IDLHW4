@@ -304,8 +304,7 @@ class ASRDataset(Dataset):
 
         # TODO: Collect feature lengths from the batch into a tensor
         # Note: Use list comprehension to collect the feature lengths from the batch   
-        for x in batch_feats:
-           print(x.shape)
+
         feat_lengths = torch.tensor([x.shape[0] for x in batch_feats]).to(torch.int) # B
 
         # TODO: Pad features to create a batch of fixed-length padded features
