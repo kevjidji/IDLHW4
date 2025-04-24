@@ -152,7 +152,7 @@ class ASRDataset(Dataset):
             feat = np.load(self.fbank_dir+"/"+self.fbank_files[i])
 
             # TODO: Truncate features to num_feats set by you in the config
-            feat = feat[:,:config["num_feats"]]
+            feat = feat[:config["num_feats"],:]
 
             # Append to self.feats (num_feats is set by you in the config)
             self.feats.append(feat)
