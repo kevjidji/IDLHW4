@@ -421,9 +421,7 @@ class EncoderDecoderTransformer(nn.Module):
             if self.training and self.layer_drop_rate > 0 and random.random() < self.layer_drop_rate:
                 continue
             # TODO: Pass through decoder layer
-            print(causal_mask.device,"ATTEN MASK DEVICE")
-            print(pad_mask_tgt.device,"pad tgt")
-            print(pad_mask_src.device,"pad src")
+            
             x_dec, self_attn, cross_attn = self.dec_layers[i](x_dec, encoder_output, attn_mask = causal_mask, dec_key_padding_mask=pad_mask_tgt, enc_key_padding_mask=pad_mask_src)
             
             # TODO: Save attention weights

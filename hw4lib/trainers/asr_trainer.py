@@ -55,6 +55,7 @@ class ASRTrainer(BaseTrainer):
         - Handle both greedy and optionally beam search decoding
     """
     def __init__(self, model, tokenizer, config, run_name, config_file, device=None):
+        print("DO SOMETHING PLEASE")
         super().__init__(model, tokenizer, config, run_name, config_file, device)
 
         # TODO: Implement the __init__ method
