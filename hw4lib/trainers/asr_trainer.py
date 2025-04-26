@@ -207,7 +207,7 @@ class ASRTrainer(BaseTrainer):
         
 
         # TODO: Call recognize
-        results = self.recognize(dataloader, recognition_config =None, config_name= None, max_length=self.text_max_len)
+        results = self.recognize(dataloader, recognition_config =None, config_name= None, max_length=179)
         
         # TODO: Extract references and hypotheses from results
         references = [result["target"] for result in results]
