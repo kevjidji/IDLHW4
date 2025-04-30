@@ -60,13 +60,9 @@ def CausalMask(padded_input):
     """
     # TODO: Implement CausalMask
     T=padded_input.shape[1]
-    causal_mask = torch.zeros(T,T)
+    
 
-    for i in range(0,T):
-        for j in range(0,T):
-            if j > i:
-                causal_mask[i][j] = 1
+    return torch.triu(torch.ones(T, T, device=device, dtype=torch.bool), diagonal=1)
 
-    return causal_mask
             
 
