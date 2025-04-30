@@ -346,7 +346,7 @@ class EncoderDecoderTransformer(nn.Module):
         x_enc = self.dropout(x_enc)
 
         # TODO: Create source padding mask on the same device as the input
-        pad_mask_src = PadMask(x_enc, x_enc_lengths).to(padded_sources.device)
+        pad_mask_src = PadMask(x_enc, x_enc_lengths)
 
         # TODO: Pass through encoder layers and save attention weights
         running_att = {}
@@ -397,7 +397,7 @@ class EncoderDecoderTransformer(nn.Module):
             warnings.warn("pad_mask_tgt is None, unless you are using the decoder as a standalone model or doing inference, you should provide target_lengths")
 
         # TODO: Create causal mask on the same device as the input
-        causal_mask = CausalMask(padded_targets).to(padded_targets.device)
+        causal_mask = CausalMask(padded_targets)
         causal_mask = torch.eq(causal_mask, 1).bool()
 
         # TODO: Apply the embedding, positional encoding, and dropout
