@@ -62,7 +62,7 @@ def CausalMask(padded_input):
     T=padded_input.shape[1]
     
 
-    return torch.triu(torch.ones(T, T, device=device, dtype=torch.bool), diagonal=1)
+    return torch.triu(torch.ones(T, T, dtype=torch.bool), diagonal=1)
 
             
 
