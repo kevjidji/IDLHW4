@@ -293,6 +293,7 @@ class SequenceGenerator:
           # Append new tokens
           x = torch.cat([x, next_tokens.unsqueeze(-1)], dim=-1)
           scores = top_scores
+      return x, scores
 
 
     def generate_sample(
