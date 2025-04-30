@@ -29,7 +29,7 @@ def PadMask(padded_input, input_lengths):
  
     batch_size = input_lengths.size(0)
    
-    max_len = input_lengths.max().item()
+    max_len = padded_input.shape[1]
     
     seq_range = torch.arange(max_len, device= padded_input.device).expand(batch_size, max_len)
 
