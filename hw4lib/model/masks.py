@@ -34,7 +34,7 @@ def PadMask(padded_input, input_lengths):
     seq_range = torch.arange(max_len, device= padded_input.device).expand(batch_size, max_len)
 
  
-    return seq_range >= lengths.unsqueeze(1)
+    return seq_range >= input_lengths.unsqueeze(1)
 ''' 
 TODO: Implement this function.
 
