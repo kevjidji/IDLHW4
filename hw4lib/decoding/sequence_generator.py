@@ -196,7 +196,7 @@ class SequenceGenerator:
             temperature: float = 1.0,
             repeat_penalty: float = 1.0
     ) -> Tuple[torch.Tensor, torch.Tensor]:
-        """
+        
         return NotImplemented
 
 
@@ -207,63 +207,7 @@ class SequenceGenerator:
             top_k: int = 0,
             top_p: float = 1.0
     ) -> Tuple[torch.Tensor, torch.Tensor]:
-        """
-        Generate sequences using sampling with top-k and nucleus filtering.
-        Args:
-            x: Input tensor of shape (batch_size, sequence_length)
-            temperature: Temperature for logits scaling
-            top_k: Number of top-k tokens to sample from
-            top_p: Proportion of top-p tokens to sample from
-        Returns:
-            Tuple of tensors: (sequences, scores)
-             - sequences is of shape (batch_size, sequence_length)
-             - scores is of shape (batch_size,)
-        """
-        # Add input validation
-        if not torch.is_tensor(x):
-            raise TypeError("Input x must be a torch tensor")
-        if x.dim() != 2:
-            raise ValueError("Input x must be 2-dimensional (batch_size, seq_len)")
-        if self.max_length < x.size(1):
-            raise ValueError("max_length must be >= input sequence length")
-        if temperature <= 0:
-            raise ValueError("temperature must be > 0")
-        if top_k < 0:
-            raise ValueError("top_k must be >= 0")
-        if not 0 < top_p <= 1.0:
-            raise ValueError("top_p must be > 0 and <= 1.0")
-        
-        # Initialize scores and finished flag
-        batch_size = x.size(0)
-        scores = torch.zeros(batch_size, device=x.device)
-        finished = torch.zeros(batch_size, dtype=torch.bool, device=x.device)
-
-        for _ in range(self.max_length - x.size(1)):
-            # Check if all sequences have finished
-            if finished.all():
-                break
-
-            # Get logits and apply filtering
-            next_scores = self.score_fn(x) # (batch_size, vocab_size)
-            filtered_logits = self._filter_logits(next_scores, temperature, top_k, top_p)
-            log_probs = torch.log_softmax(filtered_logits, dim=-1)
-            
-            # We need probabilities for multinomial sampling
-            probs = torch.exp(log_probs)
-            next_tokens = torch.multinomial(probs, num_samples=1).squeeze(-1) # (batch_size,)
-            token_scores = log_probs.gather(1, next_tokens.unsqueeze(1)).squeeze(1) # (batch_size,)
-
-            # Update scores only for unfinished sequences
-            scores = torch.where(finished, scores, scores + token_scores)
-
-            # Append next tokens
-            x = torch.cat([x, next_tokens.unsqueeze(1)], dim=1) # (batch_size, seq_len + 1)
-
-            # Check if any sequence has reached EOS 
-            is_eos = (next_tokens == self.tokenizer.eos_id)
-            finished = finished | is_eos
-
-        return x, scores
+       return NotImplemented
 
     @staticmethod
     def post_process_sequence(seq: torch.Tensor, tokenizer: H4Tokenizer) -> torch.Tensor:
